@@ -11,3 +11,4 @@ and plot confidence intervals under profile likelihood and Wald. For parameter e
 likelihood and standard maximum likelihood are included.
 Encoding: UTF-8
 LazyData: true
+Lincense: GPL-3
