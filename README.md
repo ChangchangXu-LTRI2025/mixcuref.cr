@@ -9,6 +9,6 @@ Contact:changchang.xu@alumni.utoronto.ca
 
 This package can be installed via the following R code:
 
-devtools::install_github("ChangchangXu-LTRI2025/mixcure.cr", build = TRUE, build_opts = c())
+devtools::install_github("ChangchangXu-LTRI2025/mixcuref.cr", build = TRUE, build_opts = c())
 
-library(mixcure.cr)
+library(mixcuref.cr)
