@@ -2,7 +2,7 @@
 \alias{mixcure.penal.plcr.area}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Area calculation of profile likelihood confidence region under MC
+Area calculation for profile likelihood confidence region under MC
 }
 \description{
 A function calculates the area of PLCR for each of all the covariates under the specified MC model
