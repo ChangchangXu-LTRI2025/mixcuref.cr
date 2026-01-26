@@ -23,7 +23,8 @@ If title's name needs to be specified, can be filled here.
 }
   \item{plci}{
 If NULL is specified, no overlay of PLCIs will be plotted, otherwise PLCIs will be plotted.
-}}
+}
+}
 \details{
 For categorical variables of 3 or more categories, pre-treatment for transforming it to binary dummy variables are needed, when being specified in the formula.
 }

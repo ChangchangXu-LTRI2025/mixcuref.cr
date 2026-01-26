@@ -5,8 +5,7 @@
 Profile likelihood confidence region estimation by radial-angular method
 }
 \description{
-Radial-angular method estimated profile likelihood confidence region edge points for logOR and logHR of the same covariate under the Weibull PH MC model,
-with the option of Firth-type penalized likelihood estimation or standard maximum likelihood estimation.
+Radial-angular method estimated profile likelihood confidence region edge points for logOR and logHR of the same covariate under the Weibull PH MC model, with the option of Firth-type penalized likelihood estimation or standard maximum likelihood estimation.
 }
 \usage{
 mixcure.penal.polar.plcr(formula, data, apct = 0.05,init, pl)

@@ -13,8 +13,8 @@ plcr.surface(formula, covar,indata, init, pl, alpha_lo=-2, alpha_hi=2, beta_lo=-
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{formula}{
-MC model specification in the form of a conventional survival model, i.e., Surv()~. Note the whatever x variables specified in the latency part of the model are assumed to be also regressed on in the incidence part, and vice versa.
-}
+  MC model specification in the form of a conventional survival model, i.e., Surv()~. Note the whatever x variables specified in the latency part of the model are assumed to be also regressed on in the incidence part, and vice versa.
+  }
   \item{data}{
   a data object in the form of dataframe.
   }
