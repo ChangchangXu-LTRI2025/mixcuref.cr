@@ -15,7 +15,7 @@ library(plotly)
 for (i in seq(alpha_lo, alpha_hi, by = a_step)) {
   for (j in seq(beta_lo, beta_hi, by = b_step)) {
 
-    single.prof.point <- mixcure.cr::mixcure.penal.profile.point(formula=formula,
+    single.prof.point <- mixcure.penal.profile.point(formula=formula,
                                                      data = indata, k = covar+1,
                                                      kval = c(i,j), init=init, pl=pl)
     outdat <- rbind.data.frame(outdat, single.prof.point$coefficients[[1]][1:4])
