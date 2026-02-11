@@ -135,17 +135,17 @@ mixcure.penal.polar.plcr <- function(formula, data, apct = 0.05,init, pl){
     adj_cure <- (ka.hat + r.est * cos(phi.est))
     adj_surv <- (kb.hat + r.est * sin(phi.est))
 
-    if (length(index.cure.var) < 3) {
-      # scalar multiplication path
-      lp_cure <- drop(X[, index.cure.var[-k], drop = FALSE] * as.matrix(p[index.cure.var[-length(index.cure.var)]])) -
-        X[, k] * adj_cure
-      theta <- plogis(lp_cure)
-
-      lp_surv <- drop(X[, index.cure.var[-k], drop = FALSE] * as.matrix(p[(index.surv.var[-length(index.cure.var)] - 1)])) +
-        X[, k] * adj_surv
-      logeps <- gamma * logt + lp_surv
-      eps <- exp(logeps)
-    } else {
+    # if (length(index.cure.var) < 3) {
+    #   # scalar multiplication path
+    #   lp_cure <- drop(X[, index.cure.var[-k], drop = FALSE] * as.matrix(p[index.cure.var[-length(index.cure.var)]])) -
+    #     X[, k] * adj_cure
+    #   theta <- plogis(lp_cure)
+    #
+    #   lp_surv <- drop(X[, index.cure.var[-k], drop = FALSE] * as.matrix(p[(index.surv.var[-length(index.cure.var)] - 1)])) +
+    #     X[, k] * adj_surv
+    #   logeps <- gamma * logt + lp_surv
+    #   eps <- exp(logeps)
+    # } else {
       lp_cure <- drop(X[, index.cure.var[-k], drop = FALSE] %*% as.matrix(p[index.cure.var[-length(index.cure.var)]])) -
         X[, k] * adj_cure
       theta <- plogis(lp_cure)
@@ -154,7 +154,7 @@ mixcure.penal.polar.plcr <- function(formula, data, apct = 0.05,init, pl){
         X[, k] * adj_surv
       logeps <- gamma * logt + lp_surv
       eps <- exp(logeps)
-    }
+  #  }
 
     # Stable rewrite: D = theta + (1-theta)*exp(-eps)
     emeps <- exp(-eps)
