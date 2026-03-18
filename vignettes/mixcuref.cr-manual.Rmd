@@ -1,0 +1,180 @@
+---
+title: "mixcuref.cr Manual"
+author: "Changchang Xu"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: true
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{mixcuref.cr Manual}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  eval = FALSE,
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+# Overview
+
+`mixcuref.cr` computes bivariate confidence regions for Weibull proportional-hazards mixture cure models. The package focuses on profile-likelihood confidence regions (PLCR), Wald-type confidence regions, region plotting, and area calculations.
+
+The main functions are:
+
+- `mixcure.penal.polar.plcr()` for PLCR edge-point estimation by the radial-angular method
+- `plot.mixcure.penal.polar.plcr()` for plotting PLCR or Wald regions
+- `mixcure.penal.plcr.area()` for area calculation of a PLCR
+- `mixcure.penal.wald.cr.area()` for area calculation of a Wald-type region
+- `mixcure.penal.profile.point()` for one-dimensional profile-likelihood point calculations
+- `plcr.surface()` for surface exploration
+- `mixcurefcr_fit()` as the adapter used by `Mixcuref.Meta`
+
+# Package data
+
+The package includes:
+
+- `ANNbcBMdat1`
+- `ANNbcBMdat2`
+- `ANNbcBMdat5`
+
+These datasets represent breast cancer recurrence settings with different event rates and model complexity.
+
+# PLCR estimation
+
+```{r}
+library(mixcuref.cr)
+library(survival)
+
+data(ANNbcBMdat5)
+
+plcr_obj <- mixcure.penal.polar.plcr(
+  Surv(Time, CENS == 1) ~ Her2 + LuminalA + TN + MENS0 + TUMCT,
+  data = ANNbcBMdat5,
+  apct = 0.05,
+  init = c(5, rep(0, 5), -10, rep(0, 5), 0.1),
+  pl = FALSE
+)
+
+head(plcr_obj$plcr)
+plcr_obj$coefficients
+```
+
+# Plotting the confidence region
+
+```{r}
+plot.mixcure.penal.polar.plcr(
+  obj_cr = plcr_obj,
+  cr_type = "PLCR",
+  title_name = "PLCR for ANNbcBMdat5"
+)
+```
+
+A Wald-type region can be requested by changing `cr_type = "Wald"`.
+
+```{r}
+plot.mixcure.penal.polar.plcr(
+  obj_cr = plcr_obj,
+  cr_type = "Wald",
+  title_name = "Wald CR for ANNbcBMdat5"
+)
+```
+
+# Region area
+
+```{r}
+plcr_area <- mixcure.penal.plcr.area(plcr_obj)
+plcr_area
+```
+
+```{r}
+wald_area <- mixcure.penal.wald.cr.area(
+  formula = Surv(Time, CENS == 1) ~ Her2 + LuminalA + TN + MENS0 + TUMCT,
+  data = ANNbcBMdat5,
+  apct = 0.05,
+  init = c(5, rep(0, 5), -10, rep(0, 5), 0.1),
+  true.val = NULL,
+  pl = FALSE
+)
+wald_area
+```
+
+# Profile-likelihood points and surfaces
+
+```{r}
+prof_pt <- mixcure.penal.profile.point(
+  formula = Surv(Time, CENS == 1) ~ Her2 + LuminalA + TN + MENS0 + TUMCT,
+  data = ANNbcBMdat5,
+  init = c(5, rep(0, 5), -10, rep(0, 5), 0.1),
+  k = 2,
+  kval = 0,
+  pl = FALSE
+)
+prof_pt
+```
+
+```{r}
+plcr.surface(
+  formula = Surv(Time, CENS == 1) ~ Her2 + LuminalA + TN + MENS0 + TUMCT,
+  covar = "Her2",
+  indata = ANNbcBMdat5,
+  init = c(5, rep(0, 5), -10, rep(0, 5), 0.1),
+  pl = FALSE
+)
+```
+
+# Meta-layer adapter
+
+`mixcuref.cr` can also be called through `Mixcuref.Meta`.
+
+```{r}
+# spec is a model specification object created by Mixcuref.Meta
+# fit <- mixcurefcr_fit(spec, control = list(apct = 0.05, pl = FALSE))
+```
+
+# Notes
+
+- `pl = FALSE` requests the usual likelihood.
+- `pl = TRUE` requests Firth-type penalized likelihood.
+- The initialization vector follows the same convention as `mixcuref`.
+- The object returned by `mixcure.penal.polar.plcr()` contains edge points in `obj$plcr` and coefficient summaries in `obj$coefficients`.
+
+# Session information
+
+```{r, eval=T, echo=F}
+pkgs <- c(
+#  "mixcuref.cr",
+  "survival",
+  "ggplot2",
+  "ellipse",
+  "reshape2",
+  "dplyr",
+  "tidyr",
+  "purrr"
+)
+
+desc_field <- function(pkg, field) {
+  x <- tryCatch(utils::packageDescription(pkg, fields = field), error = function(e) NA)
+  if (is.null(x) || is.na(x)) "" else x
+}
+
+pkg_table <- data.frame(
+  Package = pkgs,
+  Version = sapply(pkgs, function(x) as.character(packageVersion(x))),
+  Built   = sapply(pkgs, desc_field, field = "Built"),
+  Remote  = sapply(pkgs, desc_field, field = "RemoteSha"),
+  row.names = NULL,
+  stringsAsFactors = FALSE
+)
+
+knitr::kable(pkg_table, caption = "Package Versions")
+
+cat("\n\n")
+
+#sessionInfo()
+```
